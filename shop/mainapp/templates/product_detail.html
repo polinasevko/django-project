@@ -18,6 +18,8 @@
         <h3>{{ object.title }}</h3>
         <p>Price: {{ object.price }}$</p>
         <p style="font-size:13px;">{{ object.details }}</p>
+        <hr>
+        <a href="{% url 'add-to-cart' content_model=content_model slug=object.slug %}"><button class="btn-danger">Add to cart</button></a>
     </div>
     <p class="mt-4">Specification:</p>
 
