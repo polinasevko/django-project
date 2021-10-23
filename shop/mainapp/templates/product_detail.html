@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load specifications %}
 {% block content %}
 
 <nav aria-label="breadcrumb" class="mt-2">
@@ -17,8 +17,12 @@
     <div class="col-md-8">
         <h3>{{ object.title }}</h3>
         <p>Price: {{ object.price }}$</p>
-        <p>{{ object.details }}</p>
+        <p style="font-size:13px;">{{ object.details }}</p>
     </div>
+    <p class="mt-4">Specification:</p>
+
+    {{ object|product_specification }}
+
 </div>
 
 {% endblock content %}

@@ -29,7 +29,7 @@ class MicAdmin(admin.ModelAdmin):
 
 admin.site.register(Category)
 admin.site.register(Cart)
-admin.site.register(ProductInCart)
+admin.site.register(CartProduct)
 admin.site.register(MicProduct, MicAdmin)
 admin.site.register(PianoProduct, PianoAdmin)
 admin.site.register(GuitarProduct, GuitarAdmin)
