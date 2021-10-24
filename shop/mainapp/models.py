@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.urls import reverse
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -58,7 +59,7 @@ class Category(models.Model):
     objects = CategoryManager()
 
     def __str__(self):
-        return f"Category: {self.name}"
+        return f"{self.name}"
 
     def get_absolute_url(self):
         return reverse('category_detail', kwargs={'slug': self.slug})
@@ -80,6 +81,9 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return get_product_url(self, 'product_detail')
+
+    def get_model_name(self):
+        return self.__class__.__name__.lower()
 
 
 # GUITAR
@@ -151,24 +155,58 @@ class Cart(models.Model):
         return f"Cart: {self.id}"
 
     def save(self, *args, **kwargs):
-        cart_data = self.products.aggregate(models.Sum('total_price'), models.Count('id'))
+        cart_data = self.products.aggregate(models.Sum('total_price'), models.Sum('number_of_item'))
         print(cart_data)
-        if cart_data['total_price__sum']:
+        if cart_data['total_price__sum'] and cart_data['number_of_item__sum']:
             self.total_price = cart_data['total_price__sum']
+            self.total_number = cart_data['number_of_item__sum']
         else:
             self.total_price = 0
-        self.total_number = cart_data['id__count']
+            self.total_number = 0
         return super().save()
 
 
 
-# class Order(models.Model):
-#     pass
+class Order(models.Model):
+    STATUS_NEW = "new"
+    STATUS_INPROGRESS = "ii_progress"
+    STATUS_READY = "is_ready"
+    STATUS_COMPLETED = "completed"
+
+    BUYING_SELF = "self"
+    BUYING_DELIVERY = "delivery"
+
+    STATUS_CHOICES = (
+        (STATUS_NEW, "New order"),
+        (STATUS_INPROGRESS, "Order in progress"),
+        (STATUS_READY, "Order is ready"),
+        (STATUS_COMPLETED, "Order is completed"),
+    )
+
+    BUYING_TYPE_CHOICES = (
+        (BUYING_SELF, "Self-delivery"),
+        (BUYING_DELIVERY, "Delivery"),
+    )
+
+    customer = models.ForeignKey('Customer', related_name='related_orders', on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=9, default='+375')
+    address = models.CharField(max_length=1024)
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=STATUS_NEW)
+    buying_type = models.CharField(max_length=100, choices=BUYING_TYPE_CHOICES, default=BUYING_DELIVERY)
+    creation_date = models.DateTimeField(auto_now=True)
+    order_date = models.DateTimeField(default=timezone.now)
+    comment = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.id)
 
 
 class Customer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=9, null=True, blank=True)
+    orders = models.ManyToManyField(Order, related_name='related_customer')
 
     def __str__(self):
         return f"Customer: {self.user}"

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 
 <style>
@@ -12,7 +13,7 @@
 </style>
 
 
-<h3 class="text-center mt-5 mb-5">Cart {% if not cart.products.count %}is empty.{% endif %}</h3>
+<h3 class="text-center mt-5 mb-5">Order {% if not cart.products.count %}is empty.{% endif %}</h3>
 {% if cart.products.count %}
 <table class="table">
   <thead>
@@ -31,18 +32,8 @@
       <th scope="row">{{ item.content_object.title }}</th>
       <td class="w-25"><img src="{{ item.content_object.image.url }}" width="150"></td>
       <td>{{ item.content_object.price}}$</td>
-      <td>
-        <form action="{% url 'change-number-of-item' content_model=item.content_object.get_model_name slug=item.content_object.slug %}" method="POST">
-          {% csrf_token %}
-          <input type="number" class="form-control;" name="number_of_item" min="1" style="width: 70px" value="{{ item.number_of_item }}">
-          <input type="submit" class="btn btn-light" value="&#10004">
-        </form>
-      </td>
+      <td>{{ item.number_of_item }}</td>
       <td>{{ item.total_price }}$</td>
-      <td>
-        <a href="{% url 'remove-from-cart' content_model=item.content_object.get_model_name slug=item.content_object.slug %}">
-          <button type="button" class="btn btn-danger">&#10006</button></a>
-      </td>
     </tr>
   {% endfor %}
   <tr>
@@ -50,11 +41,15 @@
     <td>In total:</td>
     <td>{{ cart.total_number }}</td>
     <td>{{ cart.total_price }}$</td>
-    <td><a href="{% url 'checkout' %}"><button class="btn btn-info"><strong>Ordering</strong></button></a></td>
   </tr>
   </tbody>
 </table>
-{% endif %}
 
+<h3 class="text-center mt-5 mb-5">Order form</h3>
+<form action="" method="POST">
+  {{ form|crispy }}
+  <input type="submit" class="btn btn-success btn-block mb-3" value="Checkout">
+</form>
+{% endif %}
 
 {% endblock content %}
