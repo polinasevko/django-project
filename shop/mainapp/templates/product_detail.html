@@ -5,8 +5,8 @@
 <nav aria-label="breadcrumb" class="mt-2">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'base' %}">Home</a></li>
-    <li class="breadcrumb-item"><a href="#">{{ object.category.name }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Data</li>
+    <li class="breadcrumb-item"><a href="{{ object.category.get_absolute_url }}">{{ object.category.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ object.slug }}</li>
   </ol>
 </nav>
 
