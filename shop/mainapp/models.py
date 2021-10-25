@@ -154,18 +154,6 @@ class Cart(models.Model):
     def __str__(self):
         return f"Cart: {self.id}"
 
-    def save(self, *args, **kwargs):
-        cart_data = self.products.aggregate(models.Sum('total_price'), models.Sum('number_of_item'))
-        print(cart_data)
-        if cart_data['total_price__sum'] and cart_data['number_of_item__sum']:
-            self.total_price = cart_data['total_price__sum']
-            self.total_number = cart_data['number_of_item__sum']
-        else:
-            self.total_price = 0
-            self.total_number = 0
-        return super().save()
-
-
 
 class Order(models.Model):
     STATUS_NEW = "new"
@@ -189,6 +177,7 @@ class Order(models.Model):
     )
 
     customer = models.ForeignKey('Customer', related_name='related_orders', on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, null=True, blank=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=9, default='+375')
