@@ -13,7 +13,7 @@
 </style>
 
 
-<h3 class="text-center mt-5 mb-5">Order {% if not cart.products.count %}is empty.{% endif %}</h3>
+<h3 class="text-center mt-5 mb-5">Order</h3>
 {% if cart.products.count %}
 <table class="table">
   <thead>
@@ -29,9 +29,9 @@
   <tbody>
   {% for item in cart.products.all %}
     <tr>
-      <th scope="row">{{ item.content_object.title }}</th>
-      <td class="w-25"><img src="{{ item.content_object.image.url }}" width="150"></td>
-      <td>{{ item.content_object.price}}$</td>
+      <th scope="row">{{ item.product.title }}</th>
+      <td class="w-25"><img src="{{ item.product.image.url }}" width="150"></td>
+      <td>{{ item.product.price }}$</td>
       <td>{{ item.number_of_item }}</td>
       <td>{{ item.total_price }}$</td>
     </tr>
@@ -49,7 +49,7 @@
 <form action="{% url 'make-order' %}" method="POST">
   {% csrf_token %}
   {{ form|crispy }}
-  <input type="submit" class="btn btn-success btn-block mb-3" value="Checkout">
+  <input type="submit" class="btn btn-info mb-5 mt-3 w-100" value="&#10004">
 </form>
 {% endif %}
 

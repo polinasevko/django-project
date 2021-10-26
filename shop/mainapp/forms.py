@@ -10,3 +10,7 @@ class OrderForm(forms.ModelForm):
         fields = (
             'first_name', 'last_name', 'phone', 'address', 'buying_type', 'status', 'order_date', 'comment',
         )
+
+
+class LoginForm(forms.ModelForm):
+

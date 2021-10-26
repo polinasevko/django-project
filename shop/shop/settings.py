@@ -79,13 +79,12 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'mydb',
-        # 'USER': 'polina',
-        # 'PASSWORD': 'p',
-        # 'HOST': 'localhost',
-        'OPTIONS': {
-            'read_default_file': '/etc/mysql/my.cnf',
-        },
+        'NAME': 'ns',
+        'USER': 'Polina',
+        'PASSWORD': 'Polina1!',
+        # 'OPTIONS': {
+        #     'read_default_file': '/etc/mysql/my.cnf',
+        # },
     }
 }
 

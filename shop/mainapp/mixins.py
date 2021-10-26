@@ -1,26 +1,6 @@
-from django.views.generic.detail import SingleObjectMixin
 from django.views.generic import View
-from .models import Category, GuitarProduct, PianoProduct, MicProduct, Cart, Customer
+from .models import Cart, Customer
 
-
-class CategoryDetailMixin(SingleObjectMixin):
-    CATEGORY_TO_PRODUCT = {
-        'guitars': GuitarProduct,
-        'piano': PianoProduct,
-        'mics': MicProduct,
-    }
-
-    def get_context_data(self, **kwargs):
-        if isinstance(self.get_object(), Category):
-            model = self.CATEGORY_TO_PRODUCT[self.get_object().slug]
-            context = super().get_context_data(**kwargs)
-            context['categories'] = Category.objects.get_categories_for_sidebar()
-            context['category_products'] = model.objects.all()
-            return context
-        else:
-            context = super().get_context_data(**kwargs)
-            context['categories'] = Category.objects.get_categories_for_sidebar()
-            return context
 
 class CartMixin(View):
     def dispatch(self, request, *args, **kwargs):
