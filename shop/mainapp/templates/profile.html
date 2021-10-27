@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3 class="text-center mt-3 mb-3">{{ request.user.username }}'s orders.</h3>
+{% if not orders.count %}
+<div class="col-md-12" style="margin-bottom: 300px; margin-top: 180px">
+    <h3>No orders. <a href="{% url 'base' %}">Home</a></h3>
+</div>
+{% else %}
+<div class="col-md-12" style="margin-bottom: 250px; margin-top: 250px">
+    <table class="table">
+        <thead>
+            <th scope="col">Number</th>
+            <th scope="col">Status</th>
+            <th scope="col">Product</th>
+            <th scope="col">Price</th>
+            <th scope="col">Additional</th>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <th scope="row">{{ order.id }}</th>
+                <td>{{ order.get_status_display }}</td>
+                <td>
+                    <ul>
+                        {% for item in order.cart.products.all %}
+                        <li>{{ item.product.title }} * {{ item.number_of_item }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ order.cart.total_price }}$</td>
+                <td>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal-{{ order.id }}">
+                        Additional
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal-{{ order.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <h4 class="text-center">Product</h4>
+                              <table onauxclick="table">
+                                  <thead>
+                                  <tr>
+                                      <th scope="col">Name</th>
+                                      <th scope="col">Image</th>
+                                      <th scope="col">Price</th>
+                                      <th scope="col">Number</th>
+                                      <th scope="col">Total price</th>
+                                  </tr>
+                                  </thead>
+                                  <tbode>
+                                      {% for item in order.cart.products.all %}
+                                      <tr>
+                                          <td scope="row">{{ item.product.title }}</td>
+                                          <td class="w-25"><img src="{{ item.product.image.url }}" class="img-fluid"></td>
+                                          <td scope="row">{{ item.product.price }}</td>
+                                          <td scope="row">{{ item.number_of_item }}</td>
+                                          <td scope="row">{{ item.total_price }}$</td>
+                                      </tr>
+                                      {% endfor %}
+                                      <tr>
+                                          <td colspan="2"></td>
+                                          <td><strong>Total: </strong></td>
+                                          <td>{{ order.cart.total_number }}</td>
+                                          <td>{{ order.cart.total_price }}$</td>
+                                      </tr>
+                                  </tbode>
+                              </table>
+                              <hr>
+                              <h4 class="text-center">Customer information</h4>
+                              <p>Name: {{ order.first_name }}</p>
+                              <p>Last name: {{ order.last_name }}</p>
+                              <p>Phone: {{ customer.phone }}</p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endif %}
+
+{% endblock content %}

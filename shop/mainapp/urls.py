@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import BaseView, MakeOrderMixin, ChangeNumberOfItemsView, CheckoutView, DeleteFromCartView, ProductDetailView, AddToCartView, CategoryDetailView, CartView
+from django.contrib.auth.views import LogoutView
+from .views import BaseView, ProfileView, SignInView, LoginView, MakeOrderMixin, ChangeNumberOfItemsView, CheckoutView, DeleteFromCartView, ProductDetailView, AddToCartView, CategoryDetailView, CartView
 
 
 urlpatterns = [
@@ -12,4 +13,8 @@ urlpatterns = [
     path('change-number-of-item/<str:slug>', ChangeNumberOfItemsView.as_view(), name='change-number-of-item'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('make-order/', MakeOrderMixin.as_view(), name='make-order'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('sign-in/', SignInView.as_view(), name='sign-in'),
+    path('profile/', ProfileView.as_view(), name='profile'),
 ]
