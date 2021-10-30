@@ -107,7 +107,7 @@ class CheckoutView(CartMixin, View):
         return render(request, 'checkout.html', context)
 
 
-class MakeOrderMixin(CartMixin, View):
+class MakeOrderView(CartMixin, View):
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST or None)
