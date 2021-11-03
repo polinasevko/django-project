@@ -1,5 +1,7 @@
 from django.views.generic import View
 from .models import Cart, Customer
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 
 class CartMixin(View):
@@ -11,9 +13,8 @@ class CartMixin(View):
             cart = Cart.objects.filter(owner=customer, in_order=False).first()
             if not cart:
                 cart = Cart.objects.create(owner=customer)
+            self.cart = cart
+            return super(CartMixin, self).dispatch(request, *args, **kwargs)
         else:
-            cart = Cart.objects.filter(for_anonimous=True).first()
-            if not cart:
-                cart = Cart.objects.create(for_anonimous=True)
-        self.cart = cart
-        return super(CartMixin, self).dispatch(request, *args, **kwargs)
+            messages.add_message(request, messages.ERROR, 'You need to authorize.')
+            return HttpResponseRedirect('/')

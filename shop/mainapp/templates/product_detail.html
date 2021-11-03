@@ -1,25 +1,24 @@
 {% extends 'base.html' %}
-{% load specifications %}
 {% block content %}
 
 <nav aria-label="breadcrumb" class="mt-2">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'base' %}">Home</a></li>
-    <li class="breadcrumb-item"><a href="{{ object.category.get_absolute_url }}">{{ object.category.name }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ object.slug }}</li>
+    <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ product.slug }}</li>
   </ol>
 </nav>
 
 <div class="row">
     <div class="col-md-4">
-        <img src="{{ object.image.url }}" class="img-fluid">
+        <img src="{{ product.image.url }}" class="img-fluid">
     </div>
     <div class="col-md-8">
-        <h3>{{ object.title }}</h3>
-        <p>Price: {{ object.price }}$</p>
-        <p style="font-size:13px;">{{ object.details }}</p>
+        <h3>{{ product.title }}</h3>
+        <p>Price: {{ product.price }}$</p>
+        <p style="font-size:13px;">{{ product.details }}</p>
         <hr>
-        <a href="{% url 'add-to-cart' content_model=content_model slug=object.slug %}"><button class="btn-danger">Add to cart</button></a>
+        <a href="{% url 'add-to-cart' slug=product.slug %}"><button class="btn-danger">Add to cart</button></a>
     </div>
 
 </div>

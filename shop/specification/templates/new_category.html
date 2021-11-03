@@ -1,6 +1,6 @@
 {% extends 'product_spec.html' %}
 {% load crispy_forms_tags %}
-{% block content %}
+{% block new_content %}
 
 <div class="col-md-12">
     <form action="{% url 'new-category' %}" method="POST">
@@ -10,4 +10,4 @@
     </form>
 </div>
 
-{% endblock content %}
+{% endblock new_content %}

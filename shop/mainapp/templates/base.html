@@ -43,34 +43,41 @@
                 {% endfor %}
               </div>
             </li>
-
-            {% if not request.user.is_authenticated %}
-            <li>
-              <a class="nav-link text-light" href="{% url 'login' %}">Log in</a>
-            </li>
-            <li>
-              <a class="nav-link text-light" href="{% url 'sign-in' %}">Sign in</a>
-            </li>
-            {% endif %}
-            {% if request.user.is_authenticated %}
-            <li class="nav-item">
-              <span class="navbar text text-light">
-                Hello, <span class="badge badge-danger" >
-                <a style="text-decoration: none; font-size: 14px; color:white;" href="{% url 'profile' %}">
-                  {{ request.user.username }}
-                </a>
-              </span>
-                | <a href="{% url 'logout' %}" style="color: white; text-decoration: none;">Log out</a>
-              </span>
-
-            </li>
-            {% endif %}
           </ul>
 
+            {% if request.user.is_superuser %}
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link text-light" href="{% url 'base-spec' %}">Managing </a>
+              </li>
+            </ul>
+            {% endif %}
+
+
+            {% if not request.user.is_authenticated %}
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'cart' %}">Cart <span class="badge badge-pill">{{ cart.products.count }}</span></a>
+              <a class="nav-link text-light" href="{% url 'login' %}">Log in</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link text-light" href="{% url 'sign-in' %}">Sign in</a>
+            </li>
+          </ul>
+            {% endif %}
+
+          {% if request.user.is_authenticated %}
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link text-light" href="{% url 'cart' %}">Cart</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-light"  href="{% url 'logout' %}">Log out </a>
+            </li>
+            <li>
+                <a class="nav-link"  href="{% url 'profile' %}">{{ request.user.username }}</a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -82,15 +89,11 @@
       <div class="row">
 
         <div class="col-lg-3">
-
           <h1 class="my-4">Music shop</h1>
-          <div class="list-group">
-
-          </div>
-
+          {% block content_spec %}
+          {% endblock content_spec %}
         </div>
         <!-- /.col-lg-3 -->
-
 
         <div class="col-lg-9">
 
@@ -104,7 +107,7 @@
 
           {% if messages %}
             {% for message in messages %}
-              <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+              <div class="alert {% if message.level == 20 %} alert-success {% else %} alert-danger {% endif %}" role="alert">
                 <strong>{{ message }}</strong>
               </div>
             {% endfor %}
@@ -129,6 +132,7 @@
           </div>
           <!-- /.row -->
           {% endblock content %}
+
         </div>
         <!-- /.col-lg-9 -->
 
@@ -141,7 +145,7 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p>
       </div>
       <!-- /.container -->
     </footer>

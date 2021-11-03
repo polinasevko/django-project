@@ -6,33 +6,34 @@ from .models import CartProduct, Category, Product, Customer, Order
 from .mixins import CartMixin
 from .forms import OrderForm, LoginForm, SignInForm
 from django.contrib import messages
-from .utils import recalc_cart
+from .utils import recalc_cart, check_date
 from django.contrib.auth import authenticate, login
 
 
-class BaseView(CartMixin, View):
+class BaseView(View):
     def get(self, request, *args, **kwargs):
         categories = Category.objects.all()
         products = Product.objects.all()
         context = {
             'categories': categories,
             'products': products,
-            'cart': self.cart,
         }
         return render(request, 'base.html', context)
 
 
-class ProductDetailView(CartMixin, DetailView):
+class ProductDetailView(DetailView):
+    model = Product
     template_name = 'product_detail.html'
     slug_url_kwarg = 'slug'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cart'] = self.cart
+        categories = Category.objects.all()
+        context['categories'] = categories
         return context
 
 
-class CategoryDetailView(CartMixin, DetailView):
+class CategoryDetailView(DetailView):
     model = Category
     queryset = Category.objects.all()
     context_object_name = 'category'
@@ -40,7 +41,10 @@ class CategoryDetailView(CartMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cart'] = self.cart
+        category = self.get_object()
+        categories = Category.objects.all()
+        context['category_products'] = category.product_set.all()
+        context['categories'] = categories
         return context
 
 
@@ -100,9 +104,9 @@ class CheckoutView(CartMixin, View):
         categories = Category.objects.all()
         form = OrderForm(request.POST or None)
         context = {
-            'cart': self.cart,
             'categories': categories,
             'form': form,
+            'cart': self.cart,
         }
         return render(request, 'checkout.html', context)
 
@@ -133,11 +137,11 @@ class MakeOrderView(CartMixin, View):
             return HttpResponseRedirect('/checkout/')
 
 
-class LoginView(CartMixin, View):
+class LoginView(View):
     def get(self, request, *args, **kwargs):
         form = LoginForm(request.POST or None)
         categories = Category.objects.all()
-        context = {'form': form, 'categories': categories, 'cart': self.cart}
+        context = {'form': form, 'categories': categories}
         return render(request, 'login.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -150,15 +154,15 @@ class LoginView(CartMixin, View):
                 login(request, user)
                 return HttpResponseRedirect('/')
         categories = Category.objects.all()
-        context = {'form': form, 'categories': categories, 'cart': self.cart}
+        context = {'form': form, 'categories': categories}
         return render(request, 'login.html', context)
 
 
-class SignInView(CartMixin, View):
+class SignInView(View):
     def get(self, request, *args, **kwargs):
         form = SignInForm(request.POST or None)
         categories = Category.objects.all()
-        context = {'form': form, 'categories': categories, 'cart': self.cart}
+        context = {'form': form, 'categories': categories}
         return render(request, 'sign_in.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -178,14 +182,15 @@ class SignInView(CartMixin, View):
             login(request, user)
             return HttpResponseRedirect('/')
         categories = Category.objects.all()
-        context = {'categories': categories, 'form': form, 'cart': self.cart}
+        context = {'categories': categories, 'form': form}
         return render(request, 'sign_in.html', context)
 
 
-class ProfileView(CartMixin, View):
+class ProfileView(View):
     def get(self, request, *args, **kwargs):
         customer = Customer.objects.get(user=request.user)
-        orders = Order.objects.filter(customer=customer).order_by('creation_date')
+        orders = Order.objects.filter(customer=customer).order_by('order_date')
         categories = Category.objects.all()
-        context = {'categories': categories, 'orders': orders, 'cart': self.cart}
+        check_date(orders)
+        context = {'categories': categories, 'orders': orders}
         return render(request, 'profile.html', context)

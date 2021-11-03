@@ -56,7 +56,6 @@ class Cart(models.Model):
     total_number = models.PositiveIntegerField(default=0)
     total_price = models.DecimalField(default=0, max_digits=6, decimal_places=2)
     in_order = models.BooleanField(default=False)
-    for_anonimous = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Cart: {self.id}"
@@ -64,8 +63,6 @@ class Cart(models.Model):
 
 class Order(models.Model):
     STATUS_NEW = "new"
-    STATUS_INPROGRESS = "ii_progress"
-    STATUS_READY = "is_ready"
     STATUS_COMPLETED = "completed"
 
     BUYING_SELF = "self"
@@ -73,8 +70,6 @@ class Order(models.Model):
 
     STATUS_CHOICES = (
         (STATUS_NEW, "New order"),
-        (STATUS_INPROGRESS, "Order in progress"),
-        (STATUS_READY, "Order is ready"),
         (STATUS_COMPLETED, "Order is completed"),
     )
 
@@ -87,11 +82,10 @@ class Order(models.Model):
     cart = models.ForeignKey(Cart, null=True, blank=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=9, default='+375')
+    phone = models.CharField(max_length=13, default='+375')
     address = models.CharField(max_length=1024)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=STATUS_NEW)
     buying_type = models.CharField(max_length=100, choices=BUYING_TYPE_CHOICES, default=BUYING_DELIVERY)
-    creation_date = models.DateTimeField(auto_now=True)
     order_date = models.DateTimeField(default=timezone.now)
     comment = models.TextField(null=True, blank=True)
 
