@@ -48,7 +48,7 @@
             {% if request.user.is_superuser %}
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a class="nav-link text-light" href="{% url 'base-spec' %}">Managing </a>
+                <a class="nav-link text-light" href="{% url 'base-managing' %}">Managing </a>
               </li>
             </ul>
             {% endif %}
@@ -90,8 +90,8 @@
 
         <div class="col-lg-3">
           <h1 class="my-4">Music shop</h1>
-          {% block content_spec %}
-          {% endblock content_spec %}
+          {% block content_managing %}
+          {% endblock content_managing %}
         </div>
         <!-- /.col-lg-3 -->
 

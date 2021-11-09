@@ -1,0 +1,24 @@
+{% extends 'managing.html' %}
+{% load crispy_forms_tags %}
+{% block new_content %}
+
+<style>
+    select {
+        text-align-last:center;
+    }
+</style>
+
+<div class="col-md-12">
+    <form action="{% url 'feature-to-product' %}" method="GET">
+        {% csrf_token %}
+        <select name="category" class="mt-3 w-100" onchange="this.form.submit();">
+            <option disabled selected value class="text-center"> -- Select category -- </option>
+            {% for item in categories.all %}
+            <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+</div>
+
+{% endblock new_content %}

@@ -3,4 +3,3 @@ from .models import *
 
 admin.site.register(ProductFeature)
 admin.site.register(CategoryFeature)
-admin.site.register(Validator)

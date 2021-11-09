@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content_managing %}
+ <div class="list-group">
+     <a href="{% url 'new-category' %}" class="list-group-item list-group-item action {% if request.path == '/managing/new-category/' %} active {% endif %}">
+         Add new category
+     </a>
+     <a href="{% url 'new-feature' %}" class="list-group-item list-group-item action {% if request.path == '/managing/new-feature/' %} active {% endif %}">
+         Add new category feature
+     </a>
+     <a href="{% url 'select-category' %}" class="list-group-item list-group-item action {% if request.path == '/managing/feature-to-product/' or request.path == '/managing/feature-to-product/select-category/' %} active {% endif %}">
+         Add a feature to a product
+     </a>
+ </div>
+<br>
+{% endblock content_managing %}
+
+{% block content %}
+<div>
+    <h3 class="text-center mt-5 mb-5">Managing specifications</h3>
+    {% block new_content %}
+
+    {% endblock new_content %}
+</div>
+
+{% endblock content %}

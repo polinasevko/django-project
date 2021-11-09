@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+from datetime import date
 from .models import Order
 
 
@@ -16,6 +16,6 @@ def recalc_cart(cart):
 
 def check_date(orders):
     for order in orders:
-        if order.order_date <= timezone.now():
+        if order.order_date <= date.today():
             order.status = Order.STATUS_COMPLETED
             order.save()

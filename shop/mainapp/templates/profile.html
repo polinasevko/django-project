@@ -12,6 +12,7 @@
         <thead>
             <th scope="col">Number</th>
             <th scope="col">Status</th>
+            <th scope="col">Order date</th>
             <th scope="col">Product</th>
             <th scope="col">Price</th>
             <th scope="col">Additional</th>
@@ -21,6 +22,7 @@
             <tr>
                 <th scope="row">{{ order.id }}</th>
                 <td>{{ order.get_status_display }}</td>
+                <td>{{ order.order_date }}</td>
                 <td>
                     <ul>
                         {% for item in order.cart.products.all %}

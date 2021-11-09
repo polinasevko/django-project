@@ -2,12 +2,12 @@ from django.db import transaction
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, View
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from .models import CartProduct, Category, Product, Customer, Order
 from .mixins import CartMixin
 from .forms import OrderForm, LoginForm, SignInForm
-from django.contrib import messages
 from .utils import recalc_cart, check_date
-from django.contrib.auth import authenticate, login
 
 
 class BaseView(View):
@@ -29,7 +29,9 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
+        product = self.get_object()
         context['categories'] = categories
+        context['specifications'] = product.productfeature_set.all()
         return context
 
 

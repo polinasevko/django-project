@@ -34,6 +34,9 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'slug': self.slug})
 
+    def get_specifications(self):
+        return self.specifications
+
 
 class CartProduct(models.Model):
     user = models.ForeignKey('Customer', on_delete=models.CASCADE)
@@ -86,7 +89,7 @@ class Order(models.Model):
     address = models.CharField(max_length=1024)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=STATUS_NEW)
     buying_type = models.CharField(max_length=100, choices=BUYING_TYPE_CHOICES, default=BUYING_DELIVERY)
-    order_date = models.DateTimeField(default=timezone.now)
+    order_date = models.DateField(default=timezone.now())
     comment = models.TextField(null=True, blank=True)
 
     def __str__(self):
