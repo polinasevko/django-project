@@ -31,7 +31,7 @@ class ProductDetailView(DetailView):
         categories = Category.objects.all()
         product = self.get_object()
         context['categories'] = categories
-        context['specifications'] = product.productfeature_set.all()
+        context['specifications'] = product.productfeature_set.all().order_by('feature')
         return context
 
 
@@ -180,8 +180,9 @@ class SignInView(View):
             new_user.set_password(form.cleaned_data['password'])
             new_user.save()
             Customer.objects.create(user=new_user, phone=form.cleaned_data['phone'])
-            user = authenticate(username=new_user.username, password=new_user.password)
-            login(request, user)
+            # user = authenticate(username=new_user.username, password=new_user.password)
+            # print(user)
+            login(request, new_user)
             return HttpResponseRedirect('/')
         categories = Category.objects.all()
         context = {'categories': categories, 'form': form}

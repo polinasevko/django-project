@@ -93,11 +93,14 @@ class FeatureToProductView(UserPassesTestMixin, View):
         form = FeatureToProductForm(request.POST or None)
         context = {'form': form}
         if form.is_valid():
-            product_feature, created = ProductFeature.objects.get_or_create(feature=form.cleaned_data['feature'], product=form.cleaned_data['product'])
+            feature = form.cleaned_data['feature']
+            product = form.cleaned_data['product']
+            product_feature, created = ProductFeature.objects.get_or_create(feature=feature, product=product)
             if created:
                 product_feature.value = form.cleaned_data['value']
                 product_feature.save()
                 return HttpResponseRedirect('/managing/')
             else:
-                messages.add_message(request, messages.ERROR, 'A product with such characteristic already exists.')
+                messages.add_message(request, messages.ERROR, f'A {product} with specification {feature} already exists.')
+                return HttpResponseRedirect('/managing/feature-to-product/select-category/')
         return render(request, 'feature-to-product.html', context)

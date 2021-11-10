@@ -34,9 +34,6 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'slug': self.slug})
 
-    def get_specifications(self):
-        return self.specifications
-
 
 class CartProduct(models.Model):
     user = models.ForeignKey('Customer', on_delete=models.CASCADE)
