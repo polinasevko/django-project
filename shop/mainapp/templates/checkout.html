@@ -14,7 +14,7 @@
 
 
 <h3 class="text-center mt-5 mb-5">Order</h3>
-{% if cart.products.count %}
+{% if cart.cartproduct_set.count %}
 <table class="table">
   <thead>
     <tr>
@@ -27,7 +27,7 @@
     </tr>
   </thead>
   <tbody>
-  {% for item in cart.products.all %}
+  {% for item in cart.cartproduct_set.all %}
     <tr>
       <th scope="row">{{ item.product.title }}</th>
       <td class="w-25"><img src="{{ item.product.image.url }}" width="150"></td>

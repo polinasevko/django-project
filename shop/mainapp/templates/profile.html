@@ -25,7 +25,7 @@
                 <td>{{ order.order_date }}</td>
                 <td>
                     <ul>
-                        {% for item in order.cart.products.all %}
+                        {% for item in order.cart.cartproduct_set.all %}
                         <li>{{ item.product.title }} * {{ item.number_of_item }}</li>
                         {% endfor %}
                     </ul>
@@ -56,7 +56,7 @@
                                   </tr>
                                   </thead>
                                   <tbode>
-                                      {% for item in order.cart.products.all %}
+                                      {% for item in order.cart.cartproduct_set.all %}
                                       <tr>
                                           <td scope="row">{{ item.product.title }}</td>
                                           <td class="w-25"><img src="{{ item.product.image.url }}" class="img-fluid"></td>

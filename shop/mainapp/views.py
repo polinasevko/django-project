@@ -55,11 +55,11 @@ class AddToCartView(CartMixin, View):
         slug = kwargs.get('slug')
         product = Product.objects.get(slug=slug)
         cart_product, created = CartProduct.objects.get_or_create(
-            user=self.cart.owner, cart=self.cart, product=product, total_price=product.price
+            user=self.cart.owner, cart=self.cart, product=product,
         )
         if created:
-            self.cart.products.add(cart_product)
-        recalc_cart(self.cart)
+            # self.cart.products.add(cart_product)
+            recalc_cart(self.cart)
         return HttpResponseRedirect('/cart/')
 
 
@@ -69,9 +69,8 @@ class DeleteFromCartView(CartMixin, View):
         product = Product.objects.get(slug=slug)
         cart_product = CartProduct.objects.get(
             user=self.cart.owner, cart=self.cart, product=product,
-            #total_price=product.price
         )
-        self.cart.products.remove(cart_product)
+        # self.cart.products.remove(cart_product)
         cart_product.delete()
         recalc_cart(self.cart)
         return HttpResponseRedirect('/cart/')
@@ -83,7 +82,6 @@ class ChangeNumberOfItemsView(CartMixin, View):
         product = Product.objects.get(slug=slug)
         cart_product = CartProduct.objects.get(
             user=self.cart.owner, cart=self.cart, product=product,
-            #total_price=product.price
         )
         cart_product.number_of_item = int(request.POST.get('number_of_item'))
         cart_product.save()
@@ -132,7 +130,7 @@ class MakeOrderView(CartMixin, View):
             self.cart.save()
             new_order.cart = self.cart
             new_order.save()
-            customer.orders.add(new_order)
+            # customer.orders.add(new_order)
             messages.add_message(request, messages.INFO, 'Order is accepted.')
             return HttpResponseRedirect('/')
         else:
@@ -181,7 +179,6 @@ class SignInView(View):
             new_user.save()
             Customer.objects.create(user=new_user, phone=form.cleaned_data['phone'])
             # user = authenticate(username=new_user.username, password=new_user.password)
-            # print(user)
             login(request, new_user)
             return HttpResponseRedirect('/')
         categories = Category.objects.all()

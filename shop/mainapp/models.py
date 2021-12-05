@@ -37,7 +37,7 @@ class Product(models.Model):
 
 class CartProduct(models.Model):
     user = models.ForeignKey('Customer', on_delete=models.CASCADE)
-    cart = models.ForeignKey('Cart', on_delete=models.CASCADE, related_name='related_products')
+    cart = models.ForeignKey('Cart', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     number_of_item = models.PositiveIntegerField(default=1)
     total_price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -51,8 +51,8 @@ class CartProduct(models.Model):
 
 
 class Cart(models.Model):
-    owner = models.ForeignKey('Customer', null=True, on_delete=models.CASCADE)
-    products = models.ManyToManyField(CartProduct, blank=True, related_name='related_cart')
+    owner = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    # products = models.ManyToManyField(CartProduct, blank=True, related_name='related_cart')
     total_number = models.PositiveIntegerField(default=0)
     total_price = models.DecimalField(default=0, max_digits=6, decimal_places=2)
     in_order = models.BooleanField(default=False)
@@ -78,8 +78,8 @@ class Order(models.Model):
         (BUYING_DELIVERY, "Delivery"),
     )
 
-    customer = models.ForeignKey('Customer', related_name='related_orders', on_delete=models.CASCADE)
-    cart = models.ForeignKey(Cart, null=True, blank=True, on_delete=models.CASCADE)
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=13, default='+375')
@@ -94,9 +94,9 @@ class Order(models.Model):
 
 
 class Customer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=9, null=True, blank=True)
-    orders = models.ManyToManyField(Order, related_name='related_customer')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=13, null=True, blank=True)
+    # orders = models.ManyToManyField(Order)
 
     def __str__(self):
         return f"Customer: {self.user}"
